@@ -9,7 +9,7 @@ def print_frame(frame):
     print(body['instruction'], body['body'])
 
 
-def main():
+async def main():
     response = Response()
     response.add_handler("sign up", lambda body: {print(body)})
 
