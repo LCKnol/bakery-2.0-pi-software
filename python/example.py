@@ -1,5 +1,5 @@
 from stomp_ws.client import Client
-from handle_response import Response
+from response import Response
 import asyncio
 import json
 

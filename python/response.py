@@ -32,3 +32,8 @@ class Response:
             handler_func(body.get('body'))
         return
 
+    def unsubscribe(self, path: str) -> None:
+        unsub = self.subs.get(path)
+        unsub()
+        return
+
