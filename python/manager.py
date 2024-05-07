@@ -1,4 +1,4 @@
-from python.stomp_ws.client import Client
+from stomp_ws.client import Client
 from response import Response
 
 

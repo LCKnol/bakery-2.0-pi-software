@@ -17,6 +17,7 @@ def handle_pi_init(body: dict) -> None:
         # Subscribe to pi-listener
         client = Manager().get_client_instance("ws://localhost:8080/chat")
         client.subscribe(f"pi-listener/{mac_address}", callback=response.handle_response)
+        print("subscribed to pi-listener")
 
     else:
         print("this pi got rejected")

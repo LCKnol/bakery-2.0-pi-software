@@ -1,6 +1,4 @@
 import asyncio
-
-from stomp_ws.client import Client
 from manager import Manager
 from dto.pi_sign_up_dto import PiSignUpDto
 from handlers import handle_pi_init
