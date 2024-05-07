@@ -1,0 +1,12 @@
+[Unit]
+Description=Python listener script for Bakery 2.0
+After=multi-user.target
+
+[Service]
+Type=idle
+ExecStart=/usr/bin/python3 /home/colossuspi/Documents/helloWorld.py
+Restart=on-failure
+RestartSec=7s
+
+[Install]
+WantedBy=multi-user.target
