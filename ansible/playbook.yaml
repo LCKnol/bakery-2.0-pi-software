@@ -1,0 +1,35 @@
+- name: Provision Pi's
+  hosts: bakeryPis
+  tasks:
+  - name: Ping Pi's
+    ansible.builtin.ping:
+  
+  - name: Install browser
+    ansible.builtin.apt:
+      name: chromium-browser
+
+  - name: Install Python
+    ansible.builtin.apt:
+      # Using python 3.9 for now, since that's already preinstalled.
+      # name: python3=3.10.*
+      name: python3=3.9.*
+  
+  - name: Copy Python listener script to Pi
+    copy:
+      src: ./helloWorld.py
+      dest: ./Documents/helloWorld.py
+
+  - name: Copy service file for listener script to Pi
+    copy:
+      src: ./listenerScript.service
+      dest: /etc/systemd/system/listenerScript.service
+    become: true
+  
+  - name: Make Python script executable
+    command: chmod +x ./Documents/helloWorld.py
+
+  - name: Enable Python listener script service
+    command: sudo systemctl enable listenerScript.service
+
+  - name: Start Python listener script service
+    command: sudo systemctl start listenerScript.service
