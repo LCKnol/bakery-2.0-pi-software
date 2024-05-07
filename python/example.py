@@ -28,6 +28,7 @@ def main():
     time.sleep(3)
 
     # client.disconnect()
-    
+
+
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())
