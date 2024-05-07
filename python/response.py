@@ -33,7 +33,9 @@ class Response:
         return
 
     def unsubscribe(self, path: str) -> None:
-        unsub = self.subs.get(path)
+        subscription = self.subs.get(path)
+        unsub = subscription[1]
         unsub()
+
         return
 

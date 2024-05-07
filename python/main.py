@@ -24,7 +24,8 @@ async def main():
 
     # send sign-up call to back-end
     client.send("/app/sign-up-pi", body=json.dumps(PiSignUpDto(mac).__dict__))
-    #
+
+    print("signed up, going to sleep now..")
     await asyncio.sleep(300)
     #
     # client.disconnect()
