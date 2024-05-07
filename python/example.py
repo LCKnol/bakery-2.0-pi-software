@@ -1,6 +1,6 @@
 from stomp_ws.client import Client
 from handle_response import Response
-import time
+import asyncio
 import json
 
 
@@ -9,7 +9,7 @@ def print_frame(frame):
     print(body['instruction'], body['body'])
 
 
-def main():
+async def main():
     response = Response()
     response.add_handler("sign up", lambda body: {print(body)})
 
@@ -21,11 +21,8 @@ def main():
 
     # subscribe channel
     sub_id, unsubscribe = client.subscribe("/topic/greetings", callback=response.handle_response)
-    
-    # send msg to channel
-    client.send("/app/greetings", body="Koen")
 
-    time.sleep(3)
+    await asyncio.sleep(300)
 
     # client.disconnect()
 
