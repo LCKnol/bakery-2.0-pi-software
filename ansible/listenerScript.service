@@ -4,7 +4,7 @@ After=multi-user.target
 
 [Service]
 Type=idle
-ExecStart=/usr/bin/python3 /home/colossuspi/Documents/helloWorld.py
+ExecStart=/usr/bin/python3.9 /home/colossuspi/Documents/python/main.py
 Restart=on-failure
 RestartSec=7s
 
