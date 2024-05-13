@@ -20,5 +20,13 @@ class Manager:
             cls.clients[url] = new_client
 
         return cls.clients[url]
+    
+    @classmethod
+    def exit(cls) -> None:
+        cls.response.unsubscribe_all()
+        for key in cls.clients:
+            client = cls.clients[key]
+            client.disconnect()
+        return
 
 

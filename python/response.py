@@ -37,5 +37,9 @@ class Response:
         unsub = subscription[1]
         unsub()
 
+    def unsubscribe_all(self) -> None:
+        for key in self.subs:
+            unsub = self.subs.get(key)[1]
+            unsub()
         return
 

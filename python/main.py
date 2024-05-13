@@ -26,10 +26,19 @@ async def main():
     client.send("/app/sign-up-pi", body=json.dumps(PiSignUpDto(mac).__dict__))
 
     print("signed up, going to sleep now..")
-    await asyncio.sleep(300)
-    #
-    # client.disconnect()
+    try:
+        while True:
+            await asyncio.sleep(300)
+    except asyncio.CancelledError:
+        print("Cancelled by KeyboardInterrupt, cleaning up")
+        raise
+    finally:
+        Manager.exit()
+        print("Cleanup complete.")
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    try:
+        asyncio.run(main())
+    except KeyboardInterrupt:
+        print("Program stopped by user.")
