@@ -4,9 +4,15 @@ After=multi-user.target
 
 [Service]
 Type=idle
-ExecStart=/usr/bin/python3 /home/colossuspi/Documents/helloWorld.py
+Environment=PYTHONPATH=/home/colossuspi/.local/lib/python3.9/site-packages
+ExecStartPre=/bin/sleep 30
+ExecStart=/usr/bin/python3.9 /home/colossuspi/Documents/python/main.py
 Restart=on-failure
 RestartSec=7s
+User=root
+Group=root
+StandardOutput=/home/colossuspi/Documents/output.log
+StandardError=/home/colossuspi/Documents/error.log
 
 [Install]
 WantedBy=multi-user.target
