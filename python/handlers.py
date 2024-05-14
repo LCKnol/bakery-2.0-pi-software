@@ -28,12 +28,12 @@ def handle_set_dashboard(body: dict) -> None:
     url = body['url']
     # Unsubscribe from init-pi
     if url:
-        print("this pi got accepted")
+        print(f"Opening browser on {url}")
         # Subscribe to pi-listener
         execute_command(f'python -m webbrowser "{url}"')
         print("subscribed to pi-listener")
     else:
-        print("this pi got rejected")
+        print("this pi has no url")
 
 
 if __name__ == "__main__":
