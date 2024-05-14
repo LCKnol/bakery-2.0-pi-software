@@ -1,7 +1,7 @@
 import asyncio
 from manager import Manager
 from dto.pi_sign_up_dto import PiSignUpDto
-from handlers import handle_pi_init
+from handlers import handle_pi_init, handle_set_dashboard
 from mac_address import get_mac_address
 import asyncio
 import json
@@ -14,6 +14,7 @@ async def main():
     # add all handlers
     response = Manager().get_response_instance()
     response.add_handler("init-pi", handle_pi_init)
+    response.add_handler("set-dashboard", handle_set_dashboard)
 
     # open transport
     client = Manager().get_client_instance("ws://localhost:8080/chat")
