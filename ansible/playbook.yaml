@@ -1,0 +1,45 @@
+- name: Provision Pi's
+  vars:
+    skipSteps: false
+  hosts: bakeryPis
+  tasks:
+  - name: Ping Pi's
+    ansible.builtin.ping:
+    when: not skipSteps
+  
+  - name: Install browser
+    ansible.builtin.apt:
+      name: chromium-browser
+    when: not skipSteps
+
+  - name: Install Python
+    ansible.builtin.apt:
+      # Using python 3.9 for now, since that's already preinstalled.
+      # name: python3=3.10.*
+      name: python3=3.9.*
+    when: not skipSteps
+
+  - name: Install Python pip websocket library
+    ansible.builtin.pip:
+      name: websocket-client==1.2.0
+  
+  - name: Copy Python listener script to Pi
+    copy:
+      src: ../python/
+      dest: ./Documents/python/
+    become: true
+
+  - name: Copy service file for listener script to Pi
+    copy:
+      src: ./listenerScript.service
+      dest: /etc/systemd/system/listenerScript.service
+    become: true
+  
+  - name: Make Python script executable
+    command: chmod +x ./Documents/python/main.py
+
+  - name: Enable Python listener script service
+    command: sudo systemctl enable listenerScript.service
+
+  - name: Start Python listener script service
+    command: sudo systemctl start listenerScript.service

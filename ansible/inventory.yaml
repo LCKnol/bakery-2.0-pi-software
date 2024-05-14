@@ -1,0 +1,25 @@
+room14_02:
+  hosts:
+
+    # Koen's own Raspberry:
+    # (change IP and interface as needed)
+    actual_pi_koen:
+      ansible_host: fe80::1a0:7fd7:8872:3748%enx606d3cf84048
+      ansible_user: colossuspi
+
+    
+    # VM for testing purposes:
+    # pi01:
+    #   ansible_host: 127.0.0.1
+    #   ansible_port: 2222
+    #   ansible_user: pi1
+
+
+floor14:
+  children:
+    room14_02:
+
+bakeryPis:
+  children:
+    floor14:
+
