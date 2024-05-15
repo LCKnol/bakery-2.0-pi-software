@@ -34,8 +34,10 @@ def handle_set_dashboard(body: dict) -> None:
         print(f"Opening browser on {url}")
         # Subscribe to pi-listener
         if system() == "Windows":
+         execute_command("taskkill /F /IM chrome.exe")
          execute_command(f'start chrome --kiosk {url}')
         else:
+         execute_command("pkill -e -i 'chrome|firefox'")
          execute_command(f'chromium-browser --kiosk {url}')
          print("subscribed to pi-listener")
     else:
