@@ -16,30 +16,41 @@
     ansible.builtin.apt:
       # Using python 3.9 for now, since that's already preinstalled.
       # name: python3=3.10.*
-      name: python3=3.9.*
+      name: python3=3.11.*
     when: not skipSteps
-
-  - name: Install Python pip websocket library
-    ansible.builtin.pip:
-      name: websocket-client==1.2.0
+    become: true
+    
+  #- name: Install Python pip websocket library
+    #ansible.builtin.apt:
+      # Using python 3.9 for now, since that's already preinstalled.
+      # name: python3=3.10.*
+    #  name: python3-websocket-client=1.2.0
+    #when: not skipSteps
+    #become: true
   
   - name: Copy Python listener script to Pi
     copy:
       src: ../python/
       dest: ./Documents/python/
+    when: not skipSteps
     become: true
 
   - name: Copy service file for listener script to Pi
     copy:
       src: ./listenerScript.service
       dest: /etc/systemd/system/listenerScript.service
+    when: not skipSteps
     become: true
   
   - name: Make Python script executable
     command: chmod +x ./Documents/python/main.py
+    become: true
 
   - name: Enable Python listener script service
     command: sudo systemctl enable listenerScript.service
+    become: true
 
   - name: Start Python listener script service
     command: sudo systemctl start listenerScript.service
+    become: true
+  

@@ -4,9 +4,9 @@ After=multi-user.target
 
 [Service]
 Type=idle
-Environment=PYTHONPATH=/home/colossuspi/.local/lib/python3.9/site-packages
+Environment=PYTHONPATH=/home/colossuspi/Documents/test/lib/python3.11/site-packages
 ExecStartPre=/bin/sleep 30
-ExecStart=/usr/bin/python3.9 /home/colossuspi/Documents/python/main.py
+ExecStart=/home/colossuspi/Documents/test/bin/python /home/colossuspi/Documents/python/main.py
 Restart=on-failure
 RestartSec=7s
 User=root

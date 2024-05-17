@@ -17,7 +17,7 @@ def handle_pi_init(body: dict) -> None:
         print("this pi got accepted")
 
         # Subscribe to pi-listener
-        client = Manager().get_client_instance("ws://localhost:8080/chat")
+        client = Manager().get_client_instance("ws://colossus.loca.lt/chat")
         sub_id, unsubscribe = client.subscribe(f"/topic/pi-listener/{mac_address}", callback=response.handle_response)
         response.add_subscription(sub_id=sub_id, unsubscribe=unsubscribe, path=f"/topic/pi-listener/{mac_address}")
         print("subscribed to pi-listener")
