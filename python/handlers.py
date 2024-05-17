@@ -45,7 +45,7 @@ def handle_set_dashboard(body: dict) -> None:
                 execute_command("pkill firefox")
             except:
                 print("error while closing browser")
-            subprocess.Popen(['firefox', '--kiosk', url], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            subprocess.Popen(['firefox', '--kiosk', url])
             print("browser thing is afgesloten")
     else:
         print("this pi has no url")
