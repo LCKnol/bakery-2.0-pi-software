@@ -2,7 +2,7 @@ from manager import Manager
 from mac_address import get_mac_address
 from command_executor import execute_command
 from platform import system
-import asyncio
+import subprocess
 
 # init-pi
 def handle_pi_init(body: dict) -> None:
@@ -45,7 +45,11 @@ def handle_set_dashboard(body: dict) -> None:
                 execute_command("pkill firefox")
             except:
                 print("error while closing browser")
-            execute_command(f'firefox --kiosk {url}')
+            open_firefox_kiosk("www.google.nl")
             print("browser thing is afgesloten")
     else:
         print("this pi has no url")
+
+        
+def open_firefox_kiosk(url):
+    subprocess.Popen(['firefox', '--kiosk', url], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
