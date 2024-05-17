@@ -45,6 +45,7 @@ def handle_set_dashboard(body: dict) -> None:
                 execute_command("pkill firefox &")
             except:
                 print("error while closing browser")
-            execute_command(f'firefox --kiosk {url} &')
+            execute_command(f'firefox --kiosk {url} & disown')
+            print("browser thing is afgesloten")
     else:
         print("this pi has no url")
