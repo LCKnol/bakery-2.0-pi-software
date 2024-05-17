@@ -35,20 +35,19 @@ def handle_set_dashboard(body: dict) -> None:
         print(f"Opening browser on {url}")
         # Subscribe to pi-listener
         if system() == "Windows":
-            run_async((execute_handle_windows(url)))
+            try:
+                execute_command("taskkill /F /IM chrome.exe")
+            except:
+                print("error while closing browser")
+            execute_command(f'start chrome --kiosk {url}')
         else:
-            run_async((execute_handle_linux(url)))
-            print("subscribed to pi-listener")
+            try:
+                execute_command("pkill firefox")
+            except:
+                print("error while closing browser")
+            execute_command(f'firefox --kiosk {url}')
     else:
         print("this pi has no url")
-
-async def execute_handle_linux(url: str) -> None:
-         execute_command("pkill firefox")
-         execute_command(f'firefox --kiosk {url}')
-
-async def execute_handle_windows(url: str) -> None:
-         execute_command("taskkill /F /IM chrome.exe")
-         execute_command(f'start chrome --kiosk {url}')
 
          
 def run_async(coro):
