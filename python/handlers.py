@@ -42,9 +42,9 @@ def handle_set_dashboard(body: dict) -> None:
             execute_command(f'start chrome --kiosk {url}')
         else:
             try:
-                execute_command("pkill firefox")
+                execute_command("pkill firefox &")
             except:
                 print("error while closing browser")
-            execute_command(f'firefox --kiosk {url}')
+            execute_command(f'firefox --kiosk {url} &')
     else:
         print("this pi has no url")
