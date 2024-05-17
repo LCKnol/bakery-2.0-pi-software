@@ -48,12 +48,3 @@ def handle_set_dashboard(body: dict) -> None:
             execute_command(f'firefox --kiosk {url}')
     else:
         print("this pi has no url")
-
-         
-def run_async(coro):
-    try:
-        loop = asyncio.get_running_loop()
-    except RuntimeError:  # No running event loop
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-    loop.run_until_complete(coro)
