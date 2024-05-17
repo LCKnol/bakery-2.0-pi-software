@@ -2,6 +2,7 @@ from manager import Manager
 from mac_address import get_mac_address
 from command_executor import execute_command
 from platform import system
+import asyncio
 
 # init-pi
 def handle_pi_init(body: dict) -> None:
@@ -34,11 +35,26 @@ def handle_set_dashboard(body: dict) -> None:
         print(f"Opening browser on {url}")
         # Subscribe to pi-listener
         if system() == "Windows":
-         execute_command("taskkill /F /IM chrome.exe")
-         execute_command(f'start chrome --kiosk {url}')
+            run_async((execute_handle_windows(url)))
         else:
-         execute_command("pkill -e -i 'chrome|firefox'")
-         execute_command(f'chromium-browser --kiosk {url}')
-         print("subscribed to pi-listener")
+            run_async((execute_handle_linux(url)))
+            print("subscribed to pi-listener")
     else:
         print("this pi has no url")
+
+async def execute_handle_linux(url: str) -> None:
+         execute_command("pkill firefox")
+         execute_command(f'firefox --kiosk {url}')
+
+async def execute_handle_windows(url: str) -> None:
+         execute_command("taskkill /F /IM chrome.exe")
+         execute_command(f'start chrome --kiosk {url}')
+
+         
+def run_async(coro):
+    try:
+        loop = asyncio.get_running_loop()
+    except RuntimeError:  # No running event loop
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+    loop.run_until_complete(coro)
