@@ -3,11 +3,13 @@ from manager import Manager
 from dto.pi_sign_up_dto import PiSignUpDto
 from handlers import handle_pi_init, handle_set_dashboard
 from mac_address import get_mac_address
+from ip_address import get_ip_address
 import asyncio
 import json
 
 # for testing
 mac = get_mac_address()
+ip = get_ip_address()
 
 
 async def main():
@@ -24,7 +26,7 @@ async def main():
     response.add_subscription(sub_id=sub_id, unsubscribe=unsubscribe, path=f"/topic/init-pi/{mac}")
 
     # send sign-up call to back-end
-    client.send("/app/sign-up-pi", body=json.dumps(PiSignUpDto(mac).__dict__))
+    client.send("/app/sign-up-pi", body=json.dumps(PiSignUpDto(mac, ip).__dict__))
 
     print("signed up, going to sleep now..")
     try:
