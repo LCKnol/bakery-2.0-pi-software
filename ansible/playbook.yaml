@@ -1,6 +1,6 @@
 - name: Provision Pi's
   vars:
-    skipSteps: true
+    skipSteps: false
   hosts: bakeryPis
   tasks:
   - name: Ping Pi's
@@ -14,20 +14,16 @@
 
   - name: Install Python
     ansible.builtin.apt:
-      # Using python 3.9 for now, since that's already preinstalled.
-      # name: python3=3.10.*
       name: python3=3.11.*
     when: not skipSteps
     become: true
+
+  - name: Install Python pip websocket library
+    ansible.builtin.pip:
+      name: websocket-client==1.2.0
+      virtualenv: /home/colossuspi/Documents/pythonVenv/
+      virtualenv_command: "python3 -m venv"
     
-  #- name: Install Python pip websocket library
-    #ansible.builtin.apt:
-      # Using python 3.9 for now, since that's already preinstalled.
-      # name: python3=3.10.*
-    #  name: python3-websocket-client=1.2.0
-    #when: not skipSteps
-    #become: true
-  
   - name: Copy Python listener script to Pi
     copy:
       src: ../python/
@@ -53,11 +49,11 @@
     command: chmod +x ./Documents/python/main.py
     become: true
 
-  - name: Enable Python listener script service
-    command: sudo systemctl enable listenerScript.service
-    become: true
-
-  - name: Start Python listener script service
-    command: sudo systemctl start listenerScript.service
+  - name: Enable and (re-)start Python listener script service and daemon_reload
+    ansible.builtin.systemd_service:
+      enabled: true
+      state: restarted
+      daemon_reload: true
+      name: listenerScript.service
     become: true
   
