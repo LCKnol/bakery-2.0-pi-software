@@ -42,11 +42,10 @@ def handle_set_dashboard(body: dict) -> None:
             execute_command(f'start chrome --kiosk {url}')
         else:
             try:
-                execute_command("pkill firefox")
+                execute_command("pkill chromium-browser")
             except:
                 print("error while closing browser")
-            command = ['sudo', 'firefox', '--kiosk', url]
-            execute_command(command)
+            execute_command("./test_chromium")
             print("browser thing is afgesloten")
     else:
         print("this pi has no url")
