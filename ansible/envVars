@@ -1,0 +1,3 @@
+PYTHONPATH=/home/colossuspi/Documents/test/lib/python3.11/site-packages
+XAUTHORITY=/home/colossuspi/.Xauthority
+DISPLAY=:0

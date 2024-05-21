@@ -45,7 +45,8 @@ def handle_set_dashboard(body: dict) -> None:
                 execute_command("pkill chromium-browser")
             except:
                 print("error while closing browser")
-            execute_command("./test_chromium")
+            command = f'nohup chromium-browser --DISPLAY=:0 --no-sandbox --kiosk {url}'
+            execute_command(command)
             print("browser thing is afgesloten")
     else:
         print("this pi has no url")

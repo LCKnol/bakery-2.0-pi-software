@@ -4,13 +4,12 @@ After=multi-user.target
 
 [Service]
 Type=idle
-Environment=PYTHONPATH=/home/colossuspi/Documents/test/lib/python3.11/site-packages
+EnvironmentFile=/etc/systemd/system/envVars
 ExecStartPre=/bin/sleep 30
 ExecStart=/home/colossuspi/Documents/test/bin/python /home/colossuspi/Documents/python/main.py
 Restart=on-failure
 RestartSec=7s
-User=root
-Group=root
+User=colossuspi
 StandardOutput=/home/colossuspi/Documents/output.log
 StandardError=/home/colossuspi/Documents/error.log
 

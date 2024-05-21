@@ -1,6 +1,6 @@
 - name: Provision Pi's
   vars:
-    skipSteps: false
+    skipSteps: true
   hosts: bakeryPis
   tasks:
   - name: Ping Pi's
@@ -32,16 +32,23 @@
     copy:
       src: ../python/
       dest: ./Documents/python/
-    when: not skipSteps
+    # when: not skipSteps
     become: true
 
   - name: Copy service file for listener script to Pi
     copy:
       src: ./listenerScript.service
       dest: /etc/systemd/system/listenerScript.service
-    when: not skipSteps
+    # when: not skipSteps
     become: true
   
+  - name: Copy Environment variables file for listener script to Pi
+    copy:
+      src: ./envVars
+      dest: /etc/systemd/system/envVars
+    # when: not skipSteps
+    become: true
+
   - name: Make Python script executable
     command: chmod +x ./Documents/python/main.py
     become: true

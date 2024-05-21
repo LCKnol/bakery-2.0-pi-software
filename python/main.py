@@ -18,7 +18,6 @@ async def main():
     response = Manager().get_response_instance()
     response.add_handler("init-pi", handle_pi_init)
     response.add_handler("set-dashboard", handle_set_dashboard)
-    execute_command("chmod +x test_chromium.sh")
 
     # open transport
     client = Manager().get_client_instance("ws://colossus.loca.lt/chat")
