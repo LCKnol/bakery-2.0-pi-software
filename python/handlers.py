@@ -42,10 +42,10 @@ def handle_set_dashboard(body: dict) -> None:
             execute_command(f'start chrome --kiosk {url}')
         else:
             try:
-                execute_command("pkill chromium-browser")
+                execute_command("pkill -f chromium-browser")
             except:
                 print("error while closing browser")
-            command = f'nohup chromium-browser --DISPLAY=:0 --no-sandbox --kiosk {url}'
+            command = f'nohup chromium-browser --DISPLAY=:0 --no-sandbox --kiosk {url} &'
             execute_command(command)
             print("browser thing is afgesloten")
     else:
