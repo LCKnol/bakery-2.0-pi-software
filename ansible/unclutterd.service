@@ -1,0 +1,16 @@
+[Unit]
+Description=Hide mouse pointer for Bakery 2.0
+
+Wants=graphical.target
+After=graphical.target
+
+[Service]
+Type=idle
+EnvironmentFile=/etc/systemd/system/envVars
+ExecStart=unclutter -idle 1 -root
+Restart=on-failure
+RestartSec=10s
+User=colossuspi
+
+[Install]
+WantedBy=graphical.target

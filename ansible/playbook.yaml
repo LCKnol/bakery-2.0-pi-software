@@ -12,6 +12,11 @@
       name: chromium-browser
     when: not skipSteps
 
+  - name: Install unclutter
+    ansible.builtin.apt:
+      name: unclutter
+    become: true
+
   - name: Install Python
     ansible.builtin.apt:
       name: python3=3.11.*
@@ -28,21 +33,18 @@
     copy:
       src: ../python/
       dest: ./Documents/python/
-    # when: not skipSteps
     become: true
 
   - name: Copy service file for listener script to Pi
     copy:
       src: ./listenerScript.service
       dest: /etc/systemd/system/listenerScript.service
-    # when: not skipSteps
     become: true
   
   - name: Copy Environment variables file for listener script to Pi
     copy:
       src: ./envVars
       dest: /etc/systemd/system/envVars
-    # when: not skipSteps
     become: true
 
   - name: Make Python script executable
@@ -56,4 +58,17 @@
       daemon_reload: true
       name: listenerScript.service
     become: true
-  
+
+  - name: Copy service file for Unclutter to Pi
+    copy:
+      src: ./unclutterd.service
+      dest: /etc/systemd/system/unclutterd.service
+    become: true
+
+  - name: Enable and (re-)start unclutterd service and daemon_reload
+    ansible.builtin.systemd_service:
+      enabled: true
+      state: restarted
+      daemon_reload: true
+      name: unclutterd.service
+    become: true
