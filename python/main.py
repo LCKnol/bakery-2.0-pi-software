@@ -1,12 +1,13 @@
 import asyncio
 from manager import Manager
 from dto.pi_sign_up_dto import PiSignUpDto
-from handlers import handle_pi_init, handle_set_dashboard, reboot_pi
+from handlers import *
 from mac_address import get_mac_address
 from ip_address import get_ip_address
 from command_executor import execute_command
 import asyncio
 import json
+from connection import connectionUrl
 
 # for testing
 mac = get_mac_address()
@@ -19,9 +20,10 @@ async def main():
     response.add_handler("init-pi", handle_pi_init)
     response.add_handler("set-dashboard", handle_set_dashboard)
     response.add_handler("reboot",reboot_pi)
+    response.add_handler("ping", ping_pi)
 
     # open transport
-    client = Manager().get_client_instance("ws://colossus.loca.lt/chat")
+    client = Manager().get_client_instance(connectionUrl)
 
     # subscribe to back-end pending
     sub_id, unsubscribe = client.subscribe(f"/topic/init-pi/{mac}", callback=response.handle_response)
