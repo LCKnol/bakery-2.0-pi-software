@@ -4,13 +4,13 @@ from subprocess import check_output
 
 def get_ip_address():
 
-    ifaceName = check_output(
+    iface_name = check_output(
         "ip route show 0.0.0.0/0 | head -n 1 | awk '{print $5}'", shell=True).decode().strip()
-    ipAddress = ifaddresses(ifaceName).get(2)[0]['addr']
+    ip_address = ifaddresses(iface_name).get(2)[0]['addr']
 
     print()
-    print("name of first default network interface: ", ifaceName)
-    print("IP address of this interface:            ", ipAddress)
+    print("name of first default network interface: ", iface_name)
+    print("IP address of this interface:            ", ip_address)
     print()
 
-    return ifaddresses('wlp3s0').get(2)[0]['addr']
+    return ip_address

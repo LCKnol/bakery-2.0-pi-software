@@ -21,7 +21,7 @@ async def main():
     response.add_handler("reboot",reboot_pi)
 
     # open transport
-    client = Manager().get_client_instance("ws://localhost:8080/chat")
+    client = Manager().get_client_instance("ws://colossus.loca.lt/chat")
 
     # subscribe to back-end pending
     sub_id, unsubscribe = client.subscribe(f"/topic/init-pi/{mac}", callback=response.handle_response)

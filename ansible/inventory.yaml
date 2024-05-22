@@ -3,9 +3,14 @@ room14_02:
 
     # (change IP and interface as needed)
     avisi_pi:
-      ansible_host: fe80::cc80:d3ff:d905:6ce7%enx606d3cf84048
+      ansible_host: fe80::8427:1ffd:8954:f76%enx606d3cf84048
       ansible_user: colossuspi
+      pi_model: pi4
 
+    koen_pi:
+      ansible_host: fe80::d7a1:a8ef:1e4a:fc24%enx606d3cf84048
+      ansible_user: colossuspi
+      pi_model: pi2
     
     # VM for testing purposes:
     # pi01:
