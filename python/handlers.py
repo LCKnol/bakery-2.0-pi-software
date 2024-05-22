@@ -18,7 +18,7 @@ def handle_pi_init(body: dict) -> None:
         print("this pi got accepted")
 
         # Subscribe to pi-listener
-        client = Manager().get_client_instance("ws://colossus.loca.lt/chat")
+        client = Manager().get_client_instance("ws://localhost:8080/chat")
         sub_id, unsubscribe = client.subscribe(f"/topic/pi-listener/{mac_address}", callback=response.handle_response)
         response.add_subscription(sub_id=sub_id, unsubscribe=unsubscribe, path=f"/topic/pi-listener/{mac_address}")
         print("subscribed to pi-listener")
@@ -50,3 +50,8 @@ def handle_set_dashboard(body: dict) -> None:
             print("browser thing is afgesloten")
     else:
         print("this pi has no url")
+
+def reboot_pi(_ :dict )-> None:
+    print("Pi is Rebooting.")
+    execute_command("sudo reboot")
+
