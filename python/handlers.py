@@ -2,6 +2,7 @@ from manager import Manager
 from mac_address import get_mac_address
 from command_executor import execute_command
 from platform import system
+import subprocess
 
 # init-pi
 def handle_pi_init(body: dict) -> None:
@@ -17,7 +18,7 @@ def handle_pi_init(body: dict) -> None:
         print("this pi got accepted")
 
         # Subscribe to pi-listener
-        client = Manager().get_client_instance("ws://localhost:8080/chat")
+        client = Manager().get_client_instance("ws://colossus.loca.lt/chat")
         sub_id, unsubscribe = client.subscribe(f"/topic/pi-listener/{mac_address}", callback=response.handle_response)
         response.add_subscription(sub_id=sub_id, unsubscribe=unsubscribe, path=f"/topic/pi-listener/{mac_address}")
         print("subscribed to pi-listener")
@@ -34,11 +35,23 @@ def handle_set_dashboard(body: dict) -> None:
         print(f"Opening browser on {url}")
         # Subscribe to pi-listener
         if system() == "Windows":
-         execute_command("taskkill /F /IM chrome.exe")
-         execute_command(f'start chrome --kiosk {url}')
+            try:
+                execute_command("taskkill /F /IM chrome.exe")
+            except:
+                print("error while closing browser")
+            execute_command(f'start chrome --kiosk {url}')
         else:
-         execute_command("pkill -e -i 'chrome|firefox'")
-         execute_command(f'chromium-browser --kiosk {url}')
-         print("subscribed to pi-listener")
+            try:
+                execute_command("pkill -f chromium-browser")
+            except:
+                print("error while closing browser")
+            command = f'nohup chromium-browser --DISPLAY=:0 --no-sandbox --kiosk {url} &'
+            execute_command(command)
+            print("browser thing is afgesloten")
     else:
         print("this pi has no url")
+
+def reboot_pi(_ :dict )-> None:
+    print("Pi is Rebooting.")
+    execute_command("sudo reboot")
+
