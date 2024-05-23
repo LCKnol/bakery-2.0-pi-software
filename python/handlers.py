@@ -2,7 +2,10 @@ from manager import Manager
 from mac_address import get_mac_address
 from command_executor import execute_command
 from platform import system
-import subprocess
+from connection import connectionUrl
+from dto.pi_ping_dto import PiPingDto
+import json
+
 
 # init-pi
 def handle_pi_init(body: dict) -> None:
@@ -18,13 +21,14 @@ def handle_pi_init(body: dict) -> None:
         print("this pi got accepted")
 
         # Subscribe to pi-listener
-        client = Manager().get_client_instance("ws://colossus.loca.lt/chat")
+        client = Manager().get_client_instance(connectionUrl)
         sub_id, unsubscribe = client.subscribe(f"/topic/pi-listener/{mac_address}", callback=response.handle_response)
         response.add_subscription(sub_id=sub_id, unsubscribe=unsubscribe, path=f"/topic/pi-listener/{mac_address}")
         print("subscribed to pi-listener")
 
     else:
         print("this pi got rejected")
+
 
 # set-dashboard
 def handle_set_dashboard(body: dict) -> None:
@@ -51,7 +55,16 @@ def handle_set_dashboard(body: dict) -> None:
     else:
         print("this pi has no url")
 
-def reboot_pi(_ :dict )-> None:
+
+def reboot_pi(_: dict) -> None:
     print("Pi is Rebooting.")
     execute_command("sudo reboot")
+
+
+def ping_pi(_: dict) -> None:
+    print("This pi got pinged by back-end")
+    client = Manager().get_client_instance(connectionUrl)
+    mac = get_mac_address()
+    client.send("/app/ping", body=json.dumps(PiPingDto(mac).__dict__))
+    print("Pi sent ping response to back-end")
 
