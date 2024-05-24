@@ -17,6 +17,11 @@
       name: unclutter
     become: true
 
+  - name: Install CEC-Utils
+    ansible.builtin.apt:
+      name: cec-utils
+    become: true
+
   - name: Install Python 3.11 on pi2 and pi4
     ansible.builtin.apt:
       name: python3=3.11.*

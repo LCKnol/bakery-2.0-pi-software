@@ -68,3 +68,12 @@ def ping_pi(_: dict) -> None:
     client.send("/app/ping", body=json.dumps(PiPingDto(mac).__dict__))
     print("Pi sent ping response to back-end")
 
+def handle_set_tv(body: dict) -> None:
+    print("Called handler set tv")
+    option = body['option']
+    if option == True:
+         execute_command("echo 'on 0' | cec-client -s -d 1")
+         print("Tv is turning on")
+    elif option == False:
+        execute_command("echo 'standby 0' | cec-client -s -d 1")
+        print("Tv is turning off")
