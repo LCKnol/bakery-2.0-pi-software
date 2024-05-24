@@ -71,7 +71,6 @@ def ping_pi(_: dict) -> None:
 def handle_set_tv(body: dict) -> None:
     print("Called handler set tv")
     option = body['option']
-    print(option)
     if option == True:
          execute_command("echo 'on 0' | cec-client -s -d 1")
          print("Tv is turning on")
