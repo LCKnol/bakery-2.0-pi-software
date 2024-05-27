@@ -77,3 +77,9 @@ def handle_set_tv(body: dict) -> None:
     elif option == False:
         execute_command("echo 'standby 0' | cec-client -s -d 1")
         print("Tv is turning off")
+
+def update_pi(_: dict) -> None:
+    execute_command("sudo apt update")
+    print("Pi got updated now starting upgrade")
+    execute_command("sudo apt upgrade")
+    print("This pi got updated and upgraded")
