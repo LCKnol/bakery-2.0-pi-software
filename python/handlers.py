@@ -59,7 +59,7 @@ def handle_set_dashboard(body: dict) -> None:
     else:
         print("this pi has no url")
 
-    if refresh:
+    if refresh is not None:
         set_refresh_rate(refresh)
     else:
         print("No value for refresh rate was provided")
