@@ -17,6 +17,11 @@
       name: unclutter
     become: true
 
+  - name: Install CEC-Utils
+    ansible.builtin.apt:
+      name: cec-utils
+    become: true
+
   - name: Install xdotool
     ansible.builtin.apt:
       name: xdotool

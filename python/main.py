@@ -21,6 +21,7 @@ async def main():
     response.add_handler("set-dashboard", handle_set_dashboard)
     response.add_handler("reboot",handle_reboot_pi)
     response.add_handler("ping", handle_ping_pi)
+    response.add_handler("set-tv", handle_set_tv)
 
     # open transport
     client = Manager().get_client_instance(connectionUrl)
