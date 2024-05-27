@@ -7,9 +7,10 @@ After=graphical.target network.target listenerScript.service
 [Service]
 Type=idle
 EnvironmentFile=/etc/systemd/system/envVars
-ExecStart=/etc/systemd/system/refreshd.sh
+ExecStart=/home/colossuspi/Documents/refreshd.sh
 Restart=on-failure
 RestartSec=10s
 User=colossuspi
 
 [Install]
+WantedBy=listenerScript.service

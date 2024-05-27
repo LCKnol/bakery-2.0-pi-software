@@ -1,8 +1,11 @@
-from command_executor import execute_command
+import os
 
 
 def set_refresh_rate(refresh_rate: int):
-    if(refresh_rate > 0):
-        execute_command(f'export BROWSER_REFRESH_RATE={int(refresh_rate)}')
+    if (refresh_rate > 0):
+        with open("/home/colossuspi/Documents/refresh_rate.txt", "w") as file:
+            file.write(str(refresh_rate))
+
     else:
-        execute_command(f'unset BROWSER_REFRESH_RATE')
+        if os.path.exists("refresh_rate.txt"):
+            os.remove("refresh_rate.txt")

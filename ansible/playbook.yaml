@@ -58,13 +58,6 @@
       dest: /etc/systemd/system/envVars
     become: true
 
-  # - name: Make Python script executable
-  #   ansible.builtin.file:
-  #     path: ./Documents/python/main.py
-  #     state: file
-  #     mode: u=rwx,g=rwx,o=r
-  #   become: true
-
   - name: Enable and (re-)start Python listener script service and daemon_reload
     ansible.builtin.systemd_service:
       enabled: true
@@ -96,7 +89,16 @@
   - name: Copy refreshing script to the Pi
     copy:
       src: ./refreshd.sh
-      dest: /etc/systemd/system/refreshd.sh
+      dest: /home/colossuspi/Documents/refreshd.sh
+    become: true
+
+  - name: Make refreshing script executable
+    ansible.builtin.file:
+      path: /home/colossuspi/Documents/refreshd.sh
+      state: file
+      owner: colossuspi
+      group: colossuspi
+      mode: u=rwx,g=rx,o=r
     become: true
 
   - name: Enable and (re-)start refreshd service and daemon_reload
