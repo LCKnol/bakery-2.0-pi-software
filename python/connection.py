@@ -1,0 +1,1 @@
+connectionUrl = "ws://colossus.loca.lt/chat"

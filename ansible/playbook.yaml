@@ -12,17 +12,39 @@
       name: chromium-browser
     when: not skipSteps
 
-  - name: Install Python
+  - name: Install unclutter
     ansible.builtin.apt:
-      # Using python 3.9 for now, since that's already preinstalled.
-      # name: python3=3.10.*
-      name: python3=3.9.*
-    when: not skipSteps
+      name: unclutter
+    become: true
+
+  - name: Install CEC-Utils
+    ansible.builtin.apt:
+      name: cec-utils
+    become: true
+
+  - name: Install xdotool
+    ansible.builtin.apt:
+      name: xdotool
+    become: true
+
+  - name: Install Python 3.11 on pi2 and pi4
+    ansible.builtin.apt:
+      name: python3=3.11.*
+    when: not skipSteps and (hostvars[inventory_hostname].pi_model == 'pi4' or hostvars[inventory_hostname].pi_model == 'pi2')
+    become: true
 
   - name: Install Python pip websocket library
     ansible.builtin.pip:
       name: websocket-client==1.2.0
-  
+      virtualenv: /home/colossuspi/Documents/pythonVenv/
+      virtualenv_command: "python3 -m venv"
+
+  - name: Install Python pip netifaces library
+    ansible.builtin.pip:
+      name: netifaces==0.11.0
+      virtualenv: /home/colossuspi/Documents/pythonVenv/
+      virtualenv_command: "python3 -m venv"
+
   - name: Copy Python listener script to Pi
     copy:
       src: ../python/
@@ -35,11 +57,59 @@
       dest: /etc/systemd/system/listenerScript.service
     become: true
   
-  - name: Make Python script executable
-    command: chmod +x ./Documents/python/main.py
+  - name: Copy the environment variables file for our services to the Pi
+    copy:
+      src: ./envVars
+      dest: /etc/systemd/system/envVars
+    become: true
 
-  - name: Enable Python listener script service
-    command: sudo systemctl enable listenerScript.service
+  - name: Enable and (re-)start Python listener script service and daemon_reload
+    ansible.builtin.systemd_service:
+      enabled: true
+      state: restarted
+      daemon_reload: true
+      name: listenerScript.service
+    become: true
 
-  - name: Start Python listener script service
-    command: sudo systemctl start listenerScript.service
+  - name: Copy service file for Unclutter to Pi
+    copy:
+      src: ./unclutterd.service
+      dest: /etc/systemd/system/unclutterd.service
+    become: true
+
+  - name: Enable and (re-)start unclutterd service and daemon_reload
+    ansible.builtin.systemd_service:
+      enabled: true
+      state: restarted
+      daemon_reload: true
+      name: unclutterd.service
+    become: true
+
+  - name: Copy service file for the browser refreshing to the Pi
+    copy:
+      src: ./refreshd.service
+      dest: /etc/systemd/system/refreshd.service
+    become: true
+
+  - name: Copy refreshing script to the Pi
+    copy:
+      src: ./refreshd.sh
+      dest: /home/colossuspi/Documents/refreshd.sh
+    become: true
+
+  - name: Make refreshing script executable
+    ansible.builtin.file:
+      path: /home/colossuspi/Documents/refreshd.sh
+      state: file
+      owner: colossuspi
+      group: colossuspi
+      mode: u=rwx,g=rx,o=r
+    become: true
+
+  - name: Enable and (re-)start refreshd service and daemon_reload
+    ansible.builtin.systemd_service:
+      enabled: true
+      state: restarted
+      daemon_reload: true
+      name: refreshd.service
+    become: true

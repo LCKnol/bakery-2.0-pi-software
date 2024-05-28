@@ -1,12 +1,16 @@
 room14_02:
   hosts:
 
-    # Koen's own Raspberry:
     # (change IP and interface as needed)
-    actual_pi_koen:
-      ansible_host: fe80::1a0:7fd7:8872:3748%enx606d3cf84048
+    avisi_pi:
+      ansible_host: fe80::8427:1ffd:8954:f76%enx606d3cf84048
       ansible_user: colossuspi
+      pi_model: pi4
 
+    koen_pi:
+      ansible_host: fe80::d7a1:a8ef:1e4a:fc24%enx606d3cf84048
+      ansible_user: colossuspi
+      pi_model: pi2
     
     # VM for testing purposes:
     # pi01:
