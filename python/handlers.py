@@ -4,6 +4,7 @@ from command_executor import execute_command
 from platform import system
 from connection import connectionUrl
 from dto.pi_ping_dto import PiPingDto
+from refresh_rate import set_refresh_rate
 import json
 
 
@@ -22,8 +23,10 @@ def handle_pi_init(body: dict) -> None:
 
         # Subscribe to pi-listener
         client = Manager().get_client_instance(connectionUrl)
-        sub_id, unsubscribe = client.subscribe(f"/topic/pi-listener/{mac_address}", callback=response.handle_response)
-        response.add_subscription(sub_id=sub_id, unsubscribe=unsubscribe, path=f"/topic/pi-listener/{mac_address}")
+        sub_id, unsubscribe = client.subscribe(
+            f"/topic/pi-listener/{mac_address}", callback=response.handle_response)
+        response.add_subscription(
+            sub_id=sub_id, unsubscribe=unsubscribe, path=f"/topic/pi-listener/{mac_address}")
         print("subscribed to pi-listener")
 
     else:
@@ -34,6 +37,7 @@ def handle_pi_init(body: dict) -> None:
 def handle_set_dashboard(body: dict) -> None:
     print("Called handler setdashboard")
     url = body['url']
+    refresh = body['refresh']
     # Unsubscribe from init-pi
     if url:
         print(f"Opening browser on {url}")
@@ -55,25 +59,31 @@ def handle_set_dashboard(body: dict) -> None:
     else:
         print("this pi has no url")
 
+    if refresh is not None:
+        set_refresh_rate(refresh)
+    else:
+        print("No value for refresh rate was provided")
 
-def reboot_pi(_: dict) -> None:
-    print("Pi is Rebooting.")
+
+def handle_reboot_pi(_: dict) -> None:
+    print("Pi is rebooting.")
     execute_command("sudo reboot")
 
 
-def ping_pi(_: dict) -> None:
+def handle_ping_pi(_: dict) -> None:
     print("This pi got pinged by back-end")
     client = Manager().get_client_instance(connectionUrl)
     mac = get_mac_address()
     client.send("/app/ping", body=json.dumps(PiPingDto(mac).__dict__))
     print("Pi sent ping response to back-end")
 
+
 def handle_set_tv(body: dict) -> None:
     print("Called handler set tv")
     option = body['option']
     if option == True:
-         execute_command("echo 'on 0' | cec-client -s -d 1")
-         print("Tv is turning on")
+        execute_command("echo 'on 0' | cec-client -s -d 1")
+        print("Tv is turning on")
     elif option == False:
         execute_command("echo 'standby 0' | cec-client -s -d 1")
         print("Tv is turning off")
