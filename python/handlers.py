@@ -35,7 +35,7 @@ def handle_pi_init(body: dict) -> None:
 
 # set-dashboard
 def handle_set_dashboard(body: dict) -> None:
-    print("Called handler setdashboard")
+    print("Called handler setDashboard")
     url = body['url']
     refresh = body['refresh']
     # Unsubscribe from init-pi
@@ -87,3 +87,10 @@ def handle_set_tv(body: dict) -> None:
     elif option == False:
         execute_command("echo 'standby 0' | cec-client -s -d 1")
         print("Tv is turning off")
+
+
+def handle_update_pi(_: dict) -> None:
+    execute_command("sudo apt update -y")
+    print("Pi got updated now starting upgrade")
+    execute_command("sudo apt upgrade -y")
+    print("This pi got updated and upgraded")
