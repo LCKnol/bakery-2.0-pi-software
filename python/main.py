@@ -4,7 +4,6 @@ from dto.pi_sign_up_dto import PiSignUpDto
 from handlers import *
 from mac_address import get_mac_address
 from ip_address import get_ip_address
-from command_executor import execute_command
 import asyncio
 import json
 from connection import connectionUrl
@@ -22,7 +21,7 @@ async def main():
     response.add_handler("reboot", handle_reboot_pi)
     response.add_handler("ping", handle_ping_pi)
     response.add_handler("set-tv", handle_set_tv)
-    response.add_handler("update-pi", update_pi)
+    response.add_handler("update-pi", handle_update_pi)
 
     # open transport
     client = Manager().get_client_instance(connectionUrl)
