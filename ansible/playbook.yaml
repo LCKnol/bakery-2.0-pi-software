@@ -22,6 +22,11 @@
       name: cec-utils
     become: true
 
+  - name: Install xdotool
+    ansible.builtin.apt:
+      name: xdotool
+    become: true
+
   - name: Install Python 3.11 on pi2 and pi4
     ansible.builtin.apt:
       name: python3=3.11.*
@@ -58,13 +63,6 @@
       dest: /etc/systemd/system/envVars
     become: true
 
-  - name: Make Python script executable
-    ansible.builtin.file:
-      path: ./Documents/python/main.py
-      state: file
-      mode: u=rwx,g=rwx,o=r
-    become: true
-
   - name: Enable and (re-)start Python listener script service and daemon_reload
     ansible.builtin.systemd_service:
       enabled: true
@@ -85,4 +83,33 @@
       state: restarted
       daemon_reload: true
       name: unclutterd.service
+    become: true
+
+  - name: Copy service file for the browser refreshing to the Pi
+    copy:
+      src: ./refreshd.service
+      dest: /etc/systemd/system/refreshd.service
+    become: true
+
+  - name: Copy refreshing script to the Pi
+    copy:
+      src: ./refreshd.sh
+      dest: /home/colossuspi/Documents/refreshd.sh
+    become: true
+
+  - name: Make refreshing script executable
+    ansible.builtin.file:
+      path: /home/colossuspi/Documents/refreshd.sh
+      state: file
+      owner: colossuspi
+      group: colossuspi
+      mode: u=rwx,g=rx,o=r
+    become: true
+
+  - name: Enable and (re-)start refreshd service and daemon_reload
+    ansible.builtin.systemd_service:
+      enabled: true
+      state: restarted
+      daemon_reload: true
+      name: refreshd.service
     become: true

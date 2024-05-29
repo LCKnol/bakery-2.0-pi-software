@@ -1,1 +1,1 @@
-connectionUrl = "ws://localhost:8080/chat"
+connectionUrl = "ws://colossus.loca.lt/chat"
