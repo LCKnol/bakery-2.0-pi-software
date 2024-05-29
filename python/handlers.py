@@ -89,7 +89,7 @@ def handle_set_tv(body: dict) -> None:
         print("Tv is turning off")
 
 
-def  handle_update_pi(_: dict) -> None:
+def handle_update_pi(_: dict) -> None:
     execute_command("sudo apt update -y")
     print("Pi got updated now starting upgrade")
     execute_command("sudo apt upgrade -y")
