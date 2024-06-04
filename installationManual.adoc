@@ -1,0 +1,84 @@
+= Installation manual Bakery2.0
+:author: HAN, OOSE-project, team Colossus
+:email: colossus.han@outlook.com
+:toc: left
+:doctype: book
+:sectanchors:
+:source-highlighter: highlight.js
+
+== Introduction
+This manual describes the installation and set-up process of the Bakery2.0. It is meant to provide the reader with everything they need to know to get the system up and running.
+
+== Raspberry Pi's
+In this chapter we will describe the process of provisioning Raspberry Pi's, so that they're ready to use with the Bakery2.0.
+
+=== Prerequisites
+* Any number of Raspberry Pi's (preferably model Pi 4 or newer)
+* An installation of Ansible Core
+* An internet connection for each Raspberry Pi
+
+==== Raspberry Pi
+We recommend using a recent version of https://www.raspberrypi.com/software/[Raspberry Pi OS] that's appropriate for the model of Pi. Create a user with the name `colossuspi`. Ansible requires an SSH-connection to the Pi's. The Ansible server's public SSH-key should be added to the `~/.ssh/authorized_keys` file on the Pi's, this can easily be done using the official link:https://www.raspberrypi.com/software/[Raspberry Pi Imager].
+
+WARNING: The Pi will need an internet connection to download its software. If the Pi uses Wi-Fi for its internet connection, but a wired connection without internet-access for SSH, then the Pi will still attempt to use the wired connection for its internet access. This can be fixed with `ip route del` on the Pi.
+
+=== Running the Ansible playbook
+==== Inventory
+Before provisioning the Raspberry Pi's, Ansible needs to be made aware of which Pi's need to be provisioned. We do this in the so-called 'inventory', which can be found in the file `inventory.yaml`. An example entry for one Pi looks like this:
+
+.inventory.yaml
+[source, yaml]
+----
+room14_02:
+  hosts:
+    pi4_14_02_01:
+      ansible_host: 1234:abcd:1234:abcd:1234:abcd%eth1
+      ansible_user: colossuspi
+      pi_model: pi4
+----
+
+Pi's in this inventory are grouped based on in which room and floor they are. The hierarchy of groups is `bakeryPis > floor14 > room14_02`, where `bakeryPis` includes all Pi's, and `room14_02` the Pi's in room 14.02. You should add floors, rooms and Pi's to this as needed.
+
+Use `ansible_host` to give the IP address over which an SSH connection to the Pi can be made. If your Ansible server has multiple active network interfaces, also append the name of the network interface (for example: `%eth1`).
+
+`ansible_user` is the username that you want to use on the Raspberry Pi. For us this is `colossuspi`, since this is also used in parts of the code.
+
+The model of Pi can be set in `pi_model`. This information can be used to perform different actions on different models of Pi in the playbook, an example of this can be found in the task `Install Python 3.11 on pi2 and pi4` in the `playbook.yaml`. This may become relevant with future software updates or new Raspberry Pi models.
+
+==== Playbook
+The playbook (`playbook.yaml`) can be executed using this command:
+
+[code, bash]
+----
+ansible-playbook -i /path/to/inventory.yaml /path/to/playbook.yaml
+----
+
+Inside the playbook, the value of `hosts` can be changed to specify which Pi's from the inventory need to be targeted.
+
+=== Controlling TV power state
+The Raspberry Pi can be used to turn TV's on and off using HDMI-CEC. This must first be enabled on the displays/TV's. We found that CEC only works reliably when the HDMI-cable is inserted into the HDMI-port that's closest to the power connector of the Pi.
+
+WARNING: Connect the HDMI cable to the Raspberry Pi using the HDMI-port that's closest to the charging port.
+
+== Spring/Kotlin back-end
+The back-end for Bakery2.0 is provided as a Maven project, making use of the Spring framework.
+
+=== Configuration
+Some properties need to be changed in the properties files at `src/main/resources`. This includes changing the database location and login credentials.
+
+== Angular front-end
+=== Configuration
+Before building, you need to configure the URL of the back-end. This can be done in the file `app.constants.ts`.
+
+The Bakery2.0 front-end is made with Angular, it can be built with `ng build`.  Any common web server can be used to then run the front-end. `npm run start` and `ng serve` should not be used in production, since this runs on a development server.
+
+Routes are already configured in `app.routes.ts`, no further configuration should be necessary.
+
+== Database
+The Bakery2.0 makes use of a MySQL database. Instructions on installation and setup are provided below.
+
+=== Docker
+A Docker compose-file is provided to run MySQL in, this can be found in the Bakery 2.0 back-end. It's recommended to make changes to the `compose.yaml` as needed.
+
+=== Setup
+The database tables can be created with the SQL-script found at `src/main/resources/BakeryDB_Create.sql`.
